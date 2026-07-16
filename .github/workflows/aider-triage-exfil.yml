@@ -1,0 +1,23 @@
+# VULN: lethal trifecta — public trigger + org-read secret in scope + public
+# comment egress + no human gate. Naked shelled-in aider agent.
+name: Aider Issue Triage
+on:
+  issues:
+    types: [opened]
+permissions:
+  contents: read
+  issues: write
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # ORG_READ_PAT can read private org repos; the agent is told to gather
+          # context and post a public comment.
+          ORG_READ_PAT: ${{ secrets.ORG_READ_PAT }}
+        run: |
+          pip install aider-chat
+          aider --yes --message "Triage: ${{ github.event.issue.body }}. \
+            Gather related org context and post a public comment."

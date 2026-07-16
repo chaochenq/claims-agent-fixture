@@ -1,0 +1,13 @@
+# POSITIVE CONTROL (not a coding agent): a local composite action that installs
+# the JDK and builds. Invokes no LLM/agent.
+name: setup-environment
+description: Install JDK and build claims-agent
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-java@v4
+      with:
+        distribution: temurin
+        java-version: "21"
+    - shell: bash
+      run: ./gradlew build
