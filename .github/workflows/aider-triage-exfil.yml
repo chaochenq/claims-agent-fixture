@@ -14,10 +14,9 @@ jobs:
       - uses: actions/checkout@main
       - env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          # ORG_READ_PAT can read private org repos; the agent is told to gather
-          # context and post a public comment.
-          ORG_READ_PAT: ${{ secrets.ORG_READ_PAT }}
+          # The job token is scoped to this repository and expires with the job.
+          GH_TOKEN: ${{ github.token }}
         run: |
           pip install aider-chat
           aider --yes --message "Triage: ${{ github.event.issue.body }}. \
-            Gather related org context and post a public comment."
+            Gather related context from this repository and post a public comment."
