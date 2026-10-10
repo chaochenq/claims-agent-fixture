@@ -55,9 +55,8 @@ public class ClaimsAgent extends Agent {
 
   @Tool(name = "run_report", description = "Run a reporting script", capability = "exec")
   public String runReport() {
-    // VULN (CWE-78): RCE — shell exec of a request-influenced string.
     try {
-      Process p = new ProcessBuilder("sh", "-c", "report " + claimId).start();
+      Process p = new ProcessBuilder("report", claimId).start();
       return new String(p.getInputStream().readAllBytes());
     } catch (Exception e) {
       return "error";
