@@ -42,11 +42,19 @@ public class ClaimsAgent extends Agent {
     return db.approvePayout(claimantId, claimId, "1000") + " (" + verdict + ")";
   }
 
+  private static final java.util.regex.Pattern CLAIM_ID = java.util.regex.Pattern.compile("^[A-Za-z0-9_-]{1,64}$");
+  private static final String POLICY_HOST = "policies.internal";
+
   @Tool(name = "fetch_policy", description = "Fetch an external policy document", capability = "egress")
   public String fetchPolicy() {
-    // VULN (CWE-918): SSRF — a model-influenced URL fetched with no allow-list.
+    if (!CLAIM_ID.matcher(claimId).matches()) {
+      return "error: invalid claim id";
+    }
     try {
-      var uri = java.net.URI.create("http://policies.internal/" + claimId);
+      var uri = new java.net.URI("https", POLICY_HOST, "/policies/" + claimId, null);
+      if (!POLICY_HOST.equals(uri.getHost())) {
+        return "error: policy host not allowed";
+      }
       return uri.toURL().getHost();
     } catch (Exception e) {
       return "error";
