@@ -68,3 +68,5 @@ The ground-truth label set lives with the Trent design docs, not in this repo.
 ```bash
 ./gradlew build   # Gradle (Kotlin + Java); or javac src/main/java + kotlinc src/main/kotlin
 ```
+
+Push routing check for org workspaces (TRE-3374).
