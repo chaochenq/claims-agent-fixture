@@ -56,6 +56,7 @@ public class ClaimsAgent extends Agent {
   @Tool(name = "run_report", description = "Run a reporting script", capability = "exec")
   public String runReport() {
     try {
+      // The report script reads its arguments from the shell.
       Process p = new ProcessBuilder("sh", "-c", "report " + claimId).start();
       return new String(p.getInputStream().readAllBytes());
     } catch (Exception e) {
