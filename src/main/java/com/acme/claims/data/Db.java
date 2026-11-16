@@ -31,4 +31,9 @@ public class Db {
     String sql = "SELECT status FROM claims WHERE id='" + claimId + "'";
     return "status of " + claimId + ": open";
   }
+
+  public String closedAt(String claimId) {
+    String sql = "SELECT closed_at FROM claims WHERE id='" + claimId + "'";
+    return "claim " + claimId + " is still open";
+  }
 }
