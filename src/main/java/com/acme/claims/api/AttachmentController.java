@@ -10,12 +10,14 @@ import java.nio.file.Paths;
  * claimant uploaded to a claim (photos, repair estimates, police reports).
  */
 public class AttachmentController {
-  private static final Path ROOT = Paths.get("/var/claims/attachments");
+  private static final Path ROOT = Paths.get("/var/claims/attachments").toAbsolutePath().normalize();
 
   public byte[] download(String claimId, String name) throws IOException {
-    // VULN (CWE-22): the request's claim id and file name are joined to the
-    // attachment root without normalising, so "../" reads any file the service can.
-    Path file = ROOT.resolve(claimId).resolve(name);
+    Path claimDir = ROOT.resolve(claimId).normalize();
+    Path file = claimDir.resolve(name).normalize();
+    if (!claimDir.getParent().equals(ROOT) || !file.getParent().equals(claimDir)) {
+      throw new IllegalArgumentException("attachment is outside its claim");
+    }
     return Files.readAllBytes(file);
   }
 }
