@@ -33,6 +33,9 @@ public class Db {
   }
 
   public String closedAt(String claimId) {
+    if (!claimId.matches("[A-Za-z0-9-]{1,64}")) {
+      throw new IllegalArgumentException("not a claim id");
+    }
     String sql = "SELECT closed_at FROM claims WHERE id='" + claimId + "'";
     return "claim " + claimId + " is still open";
   }
