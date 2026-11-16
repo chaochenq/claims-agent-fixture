@@ -68,3 +68,5 @@ The ground-truth label set lives with the Trent design docs, not in this repo.
 ```bash
 ./gradlew build   # Gradle (Kotlin + Java); or javac src/main/java + kotlinc src/main/kotlin
 ```
+
+Attachments: `GET /v1/claims/{claimId}/attachments/{name}` returns a file uploaded to a claim.
