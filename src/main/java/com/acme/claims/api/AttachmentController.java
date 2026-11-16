@@ -18,6 +18,9 @@ public class AttachmentController {
     if (!claimDir.getParent().equals(ROOT) || !file.getParent().equals(claimDir)) {
       throw new IllegalArgumentException("attachment is outside its claim");
     }
+    if (!Files.isRegularFile(file)) {
+      throw new IllegalArgumentException("no such attachment");
+    }
     return Files.readAllBytes(file);
   }
 }
